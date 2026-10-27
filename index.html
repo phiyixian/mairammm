@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>for Mariam 🎀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ffb6d5;--hot:#ff6fa8;--lav:#dcc8ff;--cream:#fff6fa;--ink:#7a3358;--soft:#b05a86}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Gaegu','Comic Sans MS',cursive,sans-serif;font-size:1.35rem;color:var(--ink);
+  background:linear-gradient(135deg,#ffd6e8,#e9d5ff,#c9f0ff,#ffd6e8);background-size:400% 400%;
+  animation:bg 18s ease infinite;position:fixed;inset:0;width:100%;overflow:hidden;
+}
+@keyframes bg{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+
+/* floating background */
+.float{position:fixed;bottom:-60px;pointer-events:none;opacity:.55;animation:rise linear infinite;z-index:0}
+@keyframes rise{to{transform:translateY(-120vh) rotate(40deg)}}
+
+/* scenes */
+#app{position:absolute;inset:0;z-index:1}
+.scene{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;overflow-y:auto;padding:28px 18px 120px;text-align:center}
+.scene>.inner{margin:auto;width:100%;max-width:560px}
+.scene.active{display:flex;animation:pop .7s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(30px)}to{opacity:1;transform:none}}
+
+h1,h2{font-family:'Pacifico',cursive;font-weight:400;color:var(--hot);text-shadow:2px 2px 0 #fff;line-height:1.25;margin:6px 0 16px}
+h1{font-size:clamp(2.6rem,12vw,4.2rem)}
+h2{font-size:clamp(1.7rem,7vw,2.4rem)}
+.tag{display:inline-block;background:#fff;border-radius:99px;padding:2px 16px;color:var(--soft);font-size:1.1rem;box-shadow:0 3px 0 var(--pink);margin-bottom:8px;animation:wob 3s ease-in-out infinite}
+@keyframes wob{50%{transform:rotate(-3deg) scale(1.05)}}
+.hint{font-size:1.1rem;color:var(--soft);margin-top:14px;animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.45}}
+
+.bubble{background:rgba(255,255,255,.88);border:3px dashed var(--pink);border-radius:28px;padding:18px 22px;line-height:1.35;box-shadow:0 8px 24px rgba(255,111,168,.2);text-align:left}
+
+/* placeholder prompts */
+.ph{display:inline-block;font-style:italic;color:var(--soft);padding:2px 10px;border-radius:12px;
+  background:repeating-linear-gradient(45deg,#fff0f7,#fff0f7 8px,#ffe3f0 8px,#ffe3f0 16px);font-size:.95em;line-height:1.3}
+
+/* buttons */
+.btn{font:inherit;font-weight:700;color:#fff;background:var(--hot);border:0;border-radius:99px;padding:8px 26px;cursor:pointer;box-shadow:0 5px 0 #d94f8a;transition:.15s;margin-top:14px}
+.btn:hover{transform:translateY(-2px) scale(1.04)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #d94f8a}
+
+/* envelope */
+.env{position:relative;width:280px;height:180px;margin:140px auto 10px;cursor:pointer;animation:bounce 2.2s ease-in-out infinite}
+.env.open{animation:none}
+@keyframes bounce{50%{transform:translateY(-10px) rotate(-1.5deg)}}
+.env .back{position:absolute;inset:0;background:#ff9ec8;border-radius:12px}
+.env .card{position:absolute;left:8%;width:84%;height:170px;bottom:12px;background:#fffdf7;border-radius:10px;padding:14px;font-size:1.15rem;overflow:hidden;transition:transform .9s .35s cubic-bezier(.3,1.3,.5,1);z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.1);text-align:center;display:flex;align-items:center;justify-content:center}
+.env.open .card{transform:translateY(-130px)}
+.env .pocket{position:absolute;inset:0;background:#ffc2dc;border-radius:12px;clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);z-index:3}
+.env .flap{position:absolute;top:0;left:0;width:100%;height:105px;background:#ff85b8;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .5s,z-index 0s .25s;z-index:4;border-radius:12px 12px 0 0}
+.env.open .flap{transform:rotateX(180deg);z-index:1}
+.env .seal{position:absolute;left:50%;top:78px;transform:translateX(-50%);font-size:1.8rem;z-index:5;transition:opacity .2s}
+.env.open .seal{opacity:0}
+
+/* polaroid */
+.pics{display:flex;justify-content:center;align-items:flex-start;gap:12px;margin:10px 0 22px}
+.polaroid{background:#fff;padding:10px 10px 14px;box-shadow:0 8px 20px rgba(0,0,0,.18);transform:rotate(var(--r,-4deg));transition:transform .3s;position:relative;cursor:pointer}
+.pics.n1 .polaroid{width:min(320px,84vw)}
+.pics.n2 .polaroid{width:calc(50% - 6px);max-width:240px}
+.pics.n2 .polaroid:nth-child(2){margin-top:22px}
+.polaroid:hover{transform:rotate(calc(var(--r) * -.5)) scale(1.04)}
+.polaroid::before{content:'';position:absolute;top:-12px;left:50%;width:70px;height:22px;background:rgba(255,182,213,.78);transform:translateX(-50%) rotate(3deg)}
+.polaroid .pic{background:#ffe3f0;overflow:hidden}
+.polaroid img{width:100%;height:auto;display:block;animation:develop 1.8s ease-out .35s both}
+@keyframes develop{from{filter:brightness(2.4) grayscale(1) blur(7px);opacity:.25}to{filter:none;opacity:1}}
+.polaroid.wig{animation:wig .6s}
+@keyframes wig{20%{transform:rotate(calc(var(--r) + 7deg)) scale(1.07)}50%{transform:rotate(calc(var(--r) - 6deg)) scale(1.07)}80%{transform:rotate(calc(var(--r) + 3deg))}}
+
+/* cloud */
+.cloud{font-size:6rem;background:none;border:0;cursor:pointer;display:inline-block;animation:drift 3s ease-in-out infinite;margin-top:6px}
+@keyframes drift{50%{transform:translateX(14px) translateY(-6px)}}
+.cloud.sunny{animation:spin 1s ease-out}
+@keyframes spin{from{transform:scale(.2) rotate(-90deg)}to{transform:none}}
+.reveal{max-height:0;opacity:0;overflow:hidden;transition:.8s;margin-top:0}
+.reveal.show{max-height:700px;opacity:1;margin-top:10px}
+
+/* flip cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px}
+.fc{perspective:900px;height:210px;cursor:pointer}
+.fc-in{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.fc.flipped .fc-in{transform:rotateY(180deg)}
+.fc:hover .face{box-shadow:0 10px 22px rgba(255,111,168,.45)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:24px;border:3px solid #fff;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:auto;box-shadow:0 6px 16px rgba(255,111,168,.25)}
+.face.front{background:linear-gradient(160deg,#ffe0ee,#f1e4ff)}
+.face.front .em{font-size:3.2rem;animation:wob 2.5s ease-in-out infinite}
+.face.back{background:#fffdf7;transform:rotateY(180deg);font-size:1.1rem;line-height:1.3;justify-content:flex-start}
+.face.back>div{margin:auto}
+.face.front .w{font-weight:700;font-size:1.5rem;margin-top:6px}
+
+/* notes */
+.board{min-height:210px;display:flex;align-items:center;justify-content:center;margin-top:10px}
+.note{width:min(300px,82vw);min-height:170px;padding:22px 20px;background:#fff3b0;box-shadow:0 8px 18px rgba(0,0,0,.15);border-radius:4px 4px 28px 4px;transform:rotate(var(--r,-3deg));animation:drop .6s cubic-bezier(.3,1.5,.5,1);display:flex;align-items:center;justify-content:center;text-align:center;position:relative}
+.note::before{content:'📌';position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:1.6rem}
+@keyframes drop{from{opacity:0;transform:translateY(-80px) rotate(12deg) scale(.7)}to{opacity:1}}
+.count{color:var(--soft);font-size:1.1rem;margin-top:10px}
+
+/* letter */
+.letter{background:#fffdf7 repeating-linear-gradient(transparent,transparent 31px,#ffd9ea 32px);border-radius:16px;padding:20px 22px;line-height:32px;text-align:left;white-space:pre-wrap;box-shadow:0 10px 26px rgba(255,111,168,.25);border:3px solid #fff;cursor:pointer}
+.sign{font-family:'Pacifico',cursive;color:var(--hot);margin-top:14px;font-size:1.5rem}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:16px;z-index:5;background:linear-gradient(transparent,rgba(255,240,248,.85) 40%)}
+.arrow{width:52px;height:52px;border-radius:50%;border:0;background:#fff;color:var(--hot);font-size:1.6rem;cursor:pointer;box-shadow:0 4px 0 var(--pink);transition:.15s;font-family:inherit}
+.arrow:hover:not(:disabled){transform:scale(1.12)}
+.arrow:disabled{opacity:.35;cursor:default}
+.dots{display:flex;gap:8px}
+.dot{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--pink);transition:.3s;cursor:pointer}
+.dot.on{background:var(--hot);transform:scale(1.4)}
+
+/* effects */
+.fx{position:fixed;pointer-events:none;z-index:99;animation:fx 1s ease-out forwards}
+@keyframes fx{from{opacity:1;transform:translate(-50%,-50%) scale(.4)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2)}}
+.trail{position:fixed;pointer-events:none;z-index:98;animation:tr .8s forwards;font-size:16px}
+@keyframes tr{to{opacity:0;transform:translateY(24px) scale(.2) rotate(90deg)}}
+.conf{position:fixed;top:-30px;z-index:99;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<main id="app"></main>
+<nav class="nav">
+  <button class="arrow" id="prev" aria-label="back">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="arrow" id="next" aria-label="next">›</button>
+</nav>
+
+<script>
+/* ===== Your words live here. Edit between the quotes. ===== */
+const STORY = {
+  "to": "Mariam",
+  "from": "PP",
+  "cover": {
+    "teaser": "Belloo Mairammms, here is a mini gift for you just so because"
+  },
+  "memories": [
+    {
+      "title": "It all started in bali...",
+      "text": "Remember that time when you onz me for becoming the vice pres for UM-SEM, I remember that you were so enthusiastic and passionate that I was like: I think I just met my happier version twin",
+      "photos": [
+        "bali.jpeg"
+      ]
+    },
+    {
+      "title": "UM-SEM First Physical Meeting",
+      "text": "We organized our first UM-SEM Meeting and I remember I was deadly nervous leading such a big group of people, having you there really made me feel like everything is going to be alright, you are the sunshineee",
+      "photos": [
+        "firstmeeting.jpeg"
+      ]
+    },
+    {
+      "title": "The hair cutting sess",
+      "text": "Sometimes you really do impress me Mariam, not just your everyday energy and optimism, but also your hidden talent of hair cutting, you made me feel like Mulan but in real life :3",
+      "photos": [
+        "hair.jpeg"
+      ]
+    },
+    {
+      "title": "Our dedicated beef noodle soup",
+      "text": "Not just once, not twice but three times (I think) that we had beef noodle soup during the dark and gloomy (sometimes flu induced days), it reminds me of our eating sess whenever I pass by the shop every morning",
+      "photos": [
+        "beefnoodle1.jpeg",
+        "beefnoodle2.jpeg"
+      ]
+    },
+    {
+      "title": "Sim Racing for the first time",
+      "text": "There was a lot of first times we experienced together, including this kinda cute kinda funny impromptu sim racing session with Ian after our visit to RExharge office.",
+      "photos": [
+        "simracing1.jpeg",
+        "simracing2.jpeg"
+      ]
+    },
+    {
+      "title": "Sometimes I feel like I owe you a lot but not enough",
+      "text": "Really glad you decided that Malaysia is a place you will spend some of your years in :>",
+      "photos": [
+        "selfie.jpeg",
+        "selfie2.jpeg"
+      ]
+    }
+  ],
+  "finale": {
+    "title": "",
+    "letter": "All in all in a nutshell, all of these happened this year, and I guess probably only in a few months, and it can really get very overwhelming sometimes with UM-SEM on top of our year 3 workload, I am sad to hear that you get to have less social time with your friends, it's okay if we slow down sometimes when we get tired, no matter what I'm always here for you! Thank you for being on this journey and sometimes when I look back I can't believe how far we have come! See you tmr hehe"
+  }
+};
+/* ===== end ===== */
+
+
+/* ---------- helpers ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const has = v => typeof v === 'string' && v.trim() !== '';
+const T = (v, prompt) => has(v) ? esc(v.trim()).replace(/\n/g, '<br>') : `<span class="ph">✏️ ${esc(prompt)}</span>`;
+const $ = (s, r = document) => r.querySelector(s);
+const S = STORY;
+
+/* ---------- scenes ---------- */
+const scenes = [
+  { // envelope
+    html: () => `
+      <div class="inner">
+        <div class="tag">for you ♡</div>
+        <h1>${esc(S.to)}</h1>
+        <div class="env" id="env">
+          <div class="back"></div>
+          <div class="card">${T(S.cover.teaser, 'a tiny line')}</div>
+          <div class="pocket"></div>
+          <div class="flap"></div>
+          <div class="seal">💗</div>
+        </div>
+        <p class="hint" id="envHint">tap the envelope 💌</p>
+      </div>`,
+    init(el) {
+      const env = $('#env', el);
+      env.addEventListener('click', () => {
+        if (env.classList.contains('open')) return;
+        env.classList.add('open');
+        const r = env.getBoundingClientRect();
+        burst(r.left + r.width / 2, r.top + 20, 16);
+        $('#envHint', el).textContent = 'now tap the arrow ➜';
+      });
+    }
+  },
+
+  ...S.memories.map((m, i) => ({ // one page per memory
+    html: () => `
+      <div class="inner">
+        <div class="tag">memory ${i + 1}</div>
+        <h2>${T(m.title, 'title')}</h2>
+        <div class="pics n${m.photos.length}">
+          ${m.photos.map((p, k) => `<div class="polaroid" style="--r:${k % 2 ? 4 : -4}deg"><div class="pic"><img src="${esc(p)}" alt=""></div></div>`).join('')}
+        </div>
+        <div class="bubble">${T(m.text, 'write your words')}</div>
+        <p class="hint">${m.photos.length > 1 ? 'tap the photos 📸' : 'tap the photo 📸'}</p>
+      </div>`,
+    init(el) {
+      el.querySelectorAll('.polaroid').forEach(p => p.addEventListener('click', e => {
+        p.classList.remove('wig'); void p.offsetWidth; p.classList.add('wig');
+        burst(e.clientX, e.clientY, 8);
+      }));
+    }
+  })),
+
+  { // finale
+    html: () => `
+      <div class="inner">
+        <div class="tag">the last page ♡</div>
+        ${has(S.finale.title) ? `<h2>${esc(S.finale.title)}</h2>` : ''}
+        <div class="letter" id="letter"></div>
+        ${has(S.from) ? `<div class="sign">— ${esc(S.from)}</div>` : ''}
+        <button class="btn" id="hug">send a hug 🫂</button>
+        <p class="hint">tap the letter to skip the typing</p>
+      </div>`,
+    init(el) {
+      $('#hug', el).addEventListener('click', () => confetti());
+      $('#letter', el).addEventListener('click', () => finishTyping(el));
+    },
+    enter(el) {
+      const L = $('#letter', el);
+      clearInterval(L._t);
+      const full = (S.finale.letter || '').trim();
+      if (!full) { L.innerHTML = '<span class="ph">✏️ write your letter</span>'; return; }
+      let i = 0;
+      const step = Math.max(8, Math.min(30, 12000 / full.length));
+      const paint = () => { L.innerHTML = esc(full.slice(0, i)) + '<span style="visibility:hidden">' + esc(full.slice(i)) + '</span>'; };
+      paint();
+      L._full = full;
+      L._t = setInterval(() => { i++; paint(); if (i >= full.length) { clearInterval(L._t); L._t = null; L.innerHTML = esc(full); setTimeout(confetti, 400); } }, step);
+    }
+  }
+];
+
+function finishTyping(el) {
+  const L = $('#letter', el);
+  if (L._full && L._t) { clearInterval(L._t); L._t = null; L.innerHTML = esc(L._full); }
+}
+
+/* ---------- build + navigation ---------- */
+const app = $('#app'), dotsEl = $('#dots');
+const nodes = scenes.map((s, idx) => {
+  const sec = document.createElement('section');
+  sec.className = 'scene';
+  sec.innerHTML = s.html();
+  app.appendChild(sec);
+  s.init && s.init(sec);
+  const d = document.createElement('div');
+  d.className = 'dot'; d.onclick = () => go(idx);
+  dotsEl.appendChild(d);
+  return sec;
+});
+
+let cur = -1;
+function go(n) {
+  if (n < 0 || n >= scenes.length || n === cur) return;
+  if (cur >= 0) { scenes[cur].reset && scenes[cur].reset(nodes[cur]); nodes[cur].classList.remove('active'); }
+  cur = n;
+  nodes[n].classList.add('active');
+  nodes[n].scrollTop = 0;
+  [...dotsEl.children].forEach((d, i) => d.classList.toggle('on', i === n));
+  $('#prev').disabled = n === 0;
+  $('#next').disabled = n === scenes.length - 1;
+  scenes[n].enter && scenes[n].enter(nodes[n]);
+}
+$('#prev').onclick = () => go(cur - 1);
+$('#next').onclick = () => go(cur + 1);
+addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(cur + 1); if (e.key === 'ArrowLeft') go(cur - 1); });
+let sx = 0;
+addEventListener('touchstart', e => sx = e.touches[0].clientX, { passive: true });
+addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 70) go(cur + (dx < 0 ? 1 : -1)); }, { passive: true });
+go(0);
+
+/* ---------- sparkles ---------- */
+function burst(x, y, n = 8, set = ['💖','✨','🌸','💗','⭐','🎀']) {
+  for (let i = 0; i < n; i++) {
+    const e = document.createElement('span');
+    e.className = 'fx'; e.textContent = set[Math.random() * set.length | 0];
+    const a = Math.random() * Math.PI * 2, d = 40 + Math.random() * 80;
+    e.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d - 40}px;font-size:${14 + Math.random() * 16}px`;
+    document.body.appendChild(e); setTimeout(() => e.remove(), 1000);
+  }
+}
+function confetti() {
+  const set = ['💖','🌸','✨','🎀','🍓','⭐','🦋','💗'];
+  for (let i = 0; i < 70; i++) {
+    const e = document.createElement('span');
+    e.className = 'conf'; e.textContent = set[Math.random() * set.length | 0];
+    e.style.cssText = `left:${Math.random() * 100}vw;font-size:${16 + Math.random() * 20}px;animation-duration:${2.5 + Math.random() * 2.5}s;animation-delay:${Math.random() * .8}s`;
+    document.body.appendChild(e); setTimeout(() => e.remove(), 6500);
+  }
+}
+// tap anywhere for a little heart pop
+addEventListener('pointerdown', e => { if (!e.target.closest('button,.fc,.env,.arrow,.dot')) burst(e.clientX, e.clientY, 5, ['💗','✨','🌸']); });
+// cursor sparkle trail (mouse only)
+let lastT = 0;
+addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse') return;
+  const now = performance.now(); if (now - lastT < 45) return; lastT = now;
+  const t = document.createElement('span'); t.className = 'trail'; t.textContent = '✨';
+  t.style.left = e.clientX + 'px'; t.style.top = e.clientY + 'px';
+  document.body.appendChild(t); setTimeout(() => t.remove(), 800);
+});
+// floating background
+(function () {
+  const set = ['🌸','✨','💖','🎀','🫧','⭐','🦋'];
+  for (let i = 0; i < 16; i++) {
+    const f = document.createElement('span'); f.className = 'float'; f.textContent = set[i % set.length];
+    f.style.cssText = `left:${Math.random() * 100}vw;font-size:${18 + Math.random() * 26}px;animation-duration:${14 + Math.random() * 16}s;animation-delay:${-Math.random() * 20}s`;
+    document.body.appendChild(f);
+  }
+})();
+</script>
+</body>
+</html>
